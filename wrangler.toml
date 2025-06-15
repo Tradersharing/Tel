@@ -1,4 +1,3 @@
-
 name = "telegram-welcome-worker"
 main = "index.js"
 compatibility_date = "2025-06-15"
