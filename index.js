@@ -1,10 +1,14 @@
 export default {
   async fetch(request, env) {
     try {
+      // Kalau bukan POST, jangan parsing JSON
+      if (request.method !== "POST") {
+        return new Response("Hanya menerima POST request.", { status: 405 });
+      }
+
       const { BOT_TOKEN } = env;
       const data = await request.json();
-      
-      // Check apakah message valid
+
       if (data.message && data.message.text) {
         const chatId = data.message.chat.id;
         const text = data.message.text;
@@ -41,8 +45,9 @@ export default {
         console.log("Data bukan message:", JSON.stringify(data));
         return new Response("No message data.");
       }
+
     } catch (err) {
-      console.log("Error di Worker:", err);
+      console.log("Error di Worker:", err.toString());
       return new Response("Error: " + err.toString());
     }
   }
