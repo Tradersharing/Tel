@@ -1,12 +1,10 @@
 export default {
   async fetch(request, env) {
-    const { BOT_TOKEN } = env;
-
     try {
       const update = await request.json();
 
       if (!update.message || !update.message.text) {
-        return new Response("No message or text", { status: 200 });
+        return new Response("No message text", { status: 200 });
       }
 
       const chatId = update.message.chat.id;
@@ -22,35 +20,27 @@ export default {
 👉 https://t.me/info_seputarforex
 `;
 
-        const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
-        const telegramResponse = await fetch(telegramUrl, {
+        const telegramUrl = `https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`;
+        const resp = await fetch(telegramUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             chat_id: chatId,
             text: welcomeMsg,
-            parse_mode: "Markdown"
-          })
+            parse_mode: "Markdown",
+          }),
         });
 
-        const telegramResult = await telegramResponse.json();
-
-        if (!telegramResult.ok) {
-          // Log error ke console (Cloudflare dashboard bisa lihat console.log)
-          console.error("Telegram API error:", telegramResult);
+        const data = await resp.json();
+        if (!data.ok) {
+          console.error("Telegram API error:", data);
           return new Response("Telegram API error", { status: 500 });
         }
-
-        return new Response("OK", {
-          status: 200,
-          headers: { "Content-Type": "text/plain" }
-        });
       }
 
-      return new Response("No command matched.", { status: 200 });
-    } catch (err) {
-      console.error("Error processing update:", err);
+      return new Response("OK", { status: 200 });
+    } catch (e) {
+      console.error("Worker error:", e);
       return new Response("Error", { status: 500 });
     }
   }
