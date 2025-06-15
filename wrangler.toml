@@ -1,0 +1,7 @@
+
+name = "telegram-welcome-worker"
+main = "src/index.js"
+compatibility_date = "2025-06-15"
+
+[vars]
+BOT_TOKEN = "8127447550:AAGKdqsYEwxT9iEYWrrGgijakir9qTzJVsU"
