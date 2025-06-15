@@ -8,7 +8,6 @@ export default {
       const { BOT_TOKEN } = env;
       const data = await request.json();
 
-      // Validasi apakah update berisi message
       if (!data.message || !data.message.text) {
         return new Response("Bukan pesan teks Telegram.", { status: 200 });
       }
