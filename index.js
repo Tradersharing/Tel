@@ -6,7 +6,10 @@ export default {
       }
 
       const { BOT_TOKEN } = env;
-      const data = await request.json();
+
+      // Explicitly clone the request body
+      const reqBody = await request.clone().text();
+      const data = JSON.parse(reqBody);
 
       if (!data.message || !data.message.text) {
         return new Response("Bukan pesan teks Telegram.", { status: 200 });
@@ -38,7 +41,7 @@ export default {
         });
 
         const tgJson = await tgResp.json();
-        console.log("Balasan Telegram API:", JSON.stringify(tgJson));
+        console.log("Telegram API Response:", JSON.stringify(tgJson));
 
         return new Response("Pesan berhasil dikirim.", { status: 200 });
       }
@@ -46,7 +49,7 @@ export default {
       return new Response("Perintah tidak dikenali.", { status: 200 });
 
     } catch (err) {
-      console.log("Error Worker:", err.stack || err);
+      console.log("Worker error:", err.stack || err);
       return new Response("Worker error: " + (err.stack || err.toString()), { status: 500 });
     }
   }
