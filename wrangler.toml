@@ -1,6 +1,6 @@
 
 name = "telegram-welcome-worker"
-main = "src/index.js"
+main = "index.js"
 compatibility_date = "2025-06-15"
 
 [vars]
